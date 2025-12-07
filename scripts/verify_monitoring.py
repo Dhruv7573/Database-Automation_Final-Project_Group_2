@@ -55,7 +55,7 @@ def main():
         ORDER BY count DESC
     """)
     
-    print("\n📊 Metrics Summary by Operation:")
+    print("\nMetrics Summary by Operation:")
     print("-" * 60)
     print(f"{'Operation':<25} {'Count':<10} {'Avg CPU%':<12} {'Avg Latency':<12}")
     print("-" * 60)
@@ -74,12 +74,12 @@ def main():
     missing_ops = [op for op in required_ops if op not in operations]
     
     if missing_ops:
-        print(f"\n⚠️  WARNING: Missing monitoring for operations: {missing_ops}")
+        print(f"\nWARNING: Missing monitoring for operations: {missing_ops}")
     else:
-        print(f"\n✅ All critical operations monitored!")
+        print(f"\nAll critical operations monitored!")
     
     print("\n" + "="*60)
-    print("✅ MONITORING VERIFICATION PASSED")
+    print("MONITORING VERIFICATION PASSED")
     print("="*60)
     
     conn.close()

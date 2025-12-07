@@ -41,9 +41,9 @@ def main():
     """)
     result = cursor.fetchone()
     if result['count'] > 0:
-        alerts_triggered.append(f"🚨 HIGH CPU: {result['count']} instances, Max: {result['max_cpu']:.1f}%")
+        alerts_triggered.append(f"HIGH CPU: {result['count']} instances, Max: {result['max_cpu']:.1f}%")
     else:
-        print("✅ CPU usage within normal range (<85%)")
+        print("CPU usage within normal range (<85%)")
     
     # Check 2: Slow queries (>500ms)
     cursor.execute("""
@@ -53,9 +53,9 @@ def main():
     """)
     result = cursor.fetchone()
     if result['count'] > 0:
-        alerts_triggered.append(f"⚠️  SLOW QUERIES: {result['count']} instances, Max: {result['max_latency']:.1f}ms")
+        alerts_triggered.append(f"SLOW QUERIES: {result['count']} instances, Max: {result['max_latency']:.1f}ms")
     else:
-        print("✅ Query latency within acceptable range (<500ms)")
+        print("Query latency within acceptable range (<500ms)")
     
     # Check 3: Data mismatches
     cursor.execute("""
@@ -65,9 +65,9 @@ def main():
     """)
     result = cursor.fetchone()
     if result['total_mismatches'] and result['total_mismatches'] > 0:
-        alerts_triggered.append(f"❌ DATA MISMATCHES: {result['total_mismatches']} total mismatches found")
+        alerts_triggered.append(f"DATA MISMATCHES: {result['total_mismatches']} total mismatches found")
     else:
-        print("✅ No data sync mismatches detected")
+        print("No data sync mismatches detected")
     
     # Check 4: Errors
     cursor.execute("""
@@ -77,20 +77,20 @@ def main():
     """)
     result = cursor.fetchone()
     if result['total_errors'] and result['total_errors'] > 0:
-        alerts_triggered.append(f"⚠️  ERRORS: {result['total_errors']} errors encountered")
+        alerts_triggered.append(f"ERRORS: {result['total_errors']} errors encountered")
     else:
-        print("✅ No errors detected")
+        print("No errors detected")
     
     # Summary
     print("\n" + "="*60)
     if alerts_triggered:
-        print("⚠️  ALERTS TRIGGERED:")
+        print("ALERTS TRIGGERED:")
         print("="*60)
         for alert in alerts_triggered:
             print(alert)
-        print("\n💡 These alerts would trigger notifications in production")
+        print("\nThese alerts would trigger notifications in production")
     else:
-        print("✅ NO ALERTS TRIGGERED - All metrics within thresholds")
+        print("NO ALERTS TRIGGERED - All metrics within thresholds")
     print("="*60)
     
     # Write to alert log

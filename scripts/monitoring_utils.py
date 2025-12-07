@@ -46,7 +46,7 @@ def record_db_metrics(db_type, operation, start_time, error_count=0, mismatch_co
         with conn.cursor() as cur:
             cur.execute(sql, (db_type, operation, cpu, mem, duration_ms, error_count, mismatch_count))
         
-        print(f"📊 Metrics: {db_type}.{operation} | CPU: {cpu:.1f}% | Mem: {mem:.1f}% | Latency: {duration_ms:.2f}ms")
+        print(f"Metrics: {db_type}.{operation} | CPU: {cpu:.1f}% | Mem: {mem:.1f}% | Latency: {duration_ms:.2f}ms")
         
         # Check for alerts
         check_alerts(cpu, duration_ms, mismatch_count)
@@ -61,13 +61,13 @@ def check_alerts(cpu, latency_ms, mismatches):
     alerts = []
     
     if cpu > 85:
-        alerts.append(f"🚨 HIGH CPU ALERT: {cpu:.1f}% (threshold: 85%)")
+        alerts.append(f"HIGH CPU ALERT: {cpu:.1f}% (threshold: 85%)")
     
     if latency_ms > 500:
-        alerts.append(f"⚠️  SLOW QUERY ALERT: {latency_ms:.2f}ms (threshold: 500ms)")
+        alerts.append(f"SLOW QUERY ALERT: {latency_ms:.2f}ms (threshold: 500ms)")
     
     if mismatches > 0:
-        alerts.append(f"❌ DATA MISMATCH ALERT: {mismatches} mismatches found")
+        alerts.append(f"DATA MISMATCH ALERT: {mismatches} mismatches found")
     
     for alert in alerts:
         print(alert)
@@ -118,7 +118,7 @@ def get_metrics_summary():
 def print_metrics_summary():
     """Print formatted metrics summary"""
     print("\n" + "="*90)
-    print("📊 PERFORMANCE METRICS SUMMARY (Last Hour)")
+    print("PERFORMANCE METRICS SUMMARY (Last Hour)")
     print("="*90)
     
     metrics = get_metrics_summary()

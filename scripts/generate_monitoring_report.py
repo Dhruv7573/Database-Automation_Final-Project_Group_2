@@ -147,27 +147,27 @@ def main():
         report.write("-" * 70 + "\n")
         
         if high_cpu > 0:
-            report.write("   ⚠️  Consider optimizing high CPU operations\n")
+            report.write("Consider optimizing high CPU operations\n")
         if slow_query > 0:
-            report.write("   ⚠️  Review and optimize slow queries\n")
+            report.write("Review and optimize slow queries\n")
         if mismatches > 0:
-            report.write("   ❌ Investigate data sync mismatches immediately\n")
+            report.write("Investigate data sync mismatches immediately\n")
         if errors > 0:
-            report.write("   ⚠️  Review error logs and fix root causes\n")
+            report.write("Review error logs and fix root causes\n")
         
         if high_cpu == 0 and slow_query == 0 and mismatches == 0 and errors == 0:
-            report.write("   ✅ All metrics within acceptable thresholds\n")
-            report.write("   ✅ Pipeline performance is optimal\n")
+            report.write("All metrics within acceptable thresholds\n")
+            report.write("Pipeline performance is optimal\n")
         
         report.write("\n")
         report.write("="*70 + "\n")
         report.write("                     END OF REPORT\n")
         report.write("="*70 + "\n")
     
-    print(f"✅ Monitoring report generated: {report_path}")
+    print(f"Monitoring report generated: {report_path}")
     
     # Display key findings
-    print("\n📊 KEY FINDINGS:")
+    print("\nKEY FINDINGS:")
     print(f"   - Total operations: {summary['total_operations']}")
     print(f"   - Average CPU: {summary['avg_cpu']}%")
     print(f"   - Average latency: {summary['avg_latency']}ms")

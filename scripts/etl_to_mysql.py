@@ -15,7 +15,7 @@ MYSQL_PASSWORD = os.getenv("MYSQL_APP_PASSWORD")
 MYSQL_DB = os.getenv("MYSQL_DB_NAME")
 DATASET_URL = os.getenv("DATASET_URL", "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2023-01.parquet")
 
-# 🚀 Increased chunk size for faster inserts
+# Increased chunk size for faster inserts
 CHUNK_SIZE = 20000
 
 
