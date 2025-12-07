@@ -1,0 +1,14 @@
+pymysql
+pymongo
+python-dotenv
+pandas
+numpy
+scikit-learn
+psutil
+sqlalchemy
+opentelemetry-sdk
+opentelemetry-exporter-otlp
+opentelemetry-instrumentation
+pyarrow
+fastparquet
+requests
