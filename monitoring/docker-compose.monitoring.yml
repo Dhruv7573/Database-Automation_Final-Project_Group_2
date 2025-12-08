@@ -1,0 +1,137 @@
+version: "3.8"
+
+services:
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydb
+    ports:
+      - "3308:3306"
+
+  mysql-exporter:
+    image: prom/mysqld-exporter:v0.14.0
+    container_name: mysql-exporter
+    restart: always
+    environment:
+      DATA_SOURCE_NAME: "root:root@(mysql:3306)/"
+    ports:
+      - "9104:9104"
+    depends_on:
+      - mysql
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+
+  mongodb-exporter:
+    image: bitnami/mongodb-exporter:latest
+    container_name: mongodb-exporter
+    restart: always
+    environment:
+      MONGODB_URI: "mongodb://mongo:27017"
+    ports:
+      - "9216:9216"
+    depends_on:
+      - mongo
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SMTP_ENABLED=true
+      - GF_SMTP_HOST=smtp.gmail.com:587
+      - GF_SMTP_USER=kakkar.varun@gmail.com
+      - GF_SMTP_PASSWORD=uznrjcwhnevoeeux
+      - GF_SMTP_FROM_ADDRESS=kakkar.varun67@gmail.com
+      - GF_SMTP_FROM_NAME=Grafana Alerts
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: signoz-clickhouse
+    restart: always
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    environment:
+      - CLICKHOUSE_DB=signoz_traces
+    ports:
+      - "9000:9000"
+      - "8123:8123"
+
+  zookeeper:
+    image: zookeeper:3.7
+    container_name: signoz-zookeeper
+    ports:
+      - "2181:2181"
+
+  signoz-query-service:
+    image: signoz/query-service:latest
+    container_name: signoz-query-service
+    restart: always
+    volumes:
+      - signoz-data:/var/lib/signoz
+    ports:
+      - "8080:8080"
+    depends_on:
+      - clickhouse
+      - zookeeper
+
+  signoz-frontend:
+    image: signoz/frontend:latest
+    container_name: signoz-frontend
+    restart: always
+    environment:
+      - PUBLIC_API_ENDPOINT=http://signoz-query-service:8080
+    ports:
+      - "3302:3301"
+    depends_on:
+      - signoz-query-service
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: otel-collector
+    command: [ "--config=/etc/otel/config.yaml" ]
+    volumes:
+      - ./signoz-otel-collector.yaml:/etc/otel/config.yaml
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - "8081:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    restart: always
+
+
+volumes:
+  signoz-data:
+  grafana-data:
